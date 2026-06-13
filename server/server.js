@@ -265,6 +265,7 @@ app.post('/api/exchanges', (req, res) => {
     item1Owner: myItem.ownerId,
     item2Owner: targetItem.ownerId,
     status: 'completed',
+    appointment: null,
     createdAt: new Date().toISOString()
   };
 
@@ -310,6 +311,94 @@ app.get('/api/exchanges/my', (req, res) => {
     });
 
   res.json(myExchanges);
+});
+
+app.put('/api/exchanges/:id/appointment', (req, res) => {
+  const { id } = req.params;
+  const { userId, location, time, contactNote, reminder } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ error: '缺少用户ID' });
+  }
+
+  if (!location || !time) {
+    return res.status(400).json({ error: '地点和时间为必填项' });
+  }
+
+  const exchanges = readExchanges();
+  const exchangeIndex = exchanges.findIndex(e => e.id === id);
+
+  if (exchangeIndex === -1) {
+    return res.status(404).json({ error: '交换记录不存在' });
+  }
+
+  const exchange = exchanges[exchangeIndex];
+
+  if (exchange.item1Owner !== userId && exchange.item2Owner !== userId) {
+    return res.status(403).json({ error: '无权限操作此交换' });
+  }
+
+  if (exchange.status !== 'completed') {
+    return res.status(400).json({ error: '交换未完成，无法设置预约' });
+  }
+
+  const appointment = {
+    location,
+    time,
+    contactNote: contactNote || '',
+    reminder: reminder || '',
+    createdBy: userId,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    status: 'scheduled'
+  };
+
+  if (exchange.appointment) {
+    appointment.createdAt = exchange.appointment.createdAt;
+    appointment.createdBy = exchange.appointment.createdBy;
+  }
+
+  exchanges[exchangeIndex].appointment = appointment;
+  writeExchanges(exchanges);
+
+  res.json({ exchange: exchanges[exchangeIndex] });
+});
+
+app.delete('/api/exchanges/:id/appointment', (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.query;
+
+  if (!userId) {
+    return res.status(400).json({ error: '缺少用户ID' });
+  }
+
+  const exchanges = readExchanges();
+  const exchangeIndex = exchanges.findIndex(e => e.id === id);
+
+  if (exchangeIndex === -1) {
+    return res.status(404).json({ error: '交换记录不存在' });
+  }
+
+  const exchange = exchanges[exchangeIndex];
+
+  if (exchange.item1Owner !== userId && exchange.item2Owner !== userId) {
+    return res.status(403).json({ error: '无权限操作此交换' });
+  }
+
+  if (!exchange.appointment) {
+    return res.status(400).json({ error: '该交换暂无预约' });
+  }
+
+  exchanges[exchangeIndex].appointment = {
+    ...exchange.appointment,
+    status: 'cancelled',
+    cancelledBy: userId,
+    cancelledAt: new Date().toISOString()
+  };
+
+  writeExchanges(exchanges);
+
+  res.json({ exchange: exchanges[exchangeIndex] });
 });
 
 app.delete('/api/items/:id', (req, res) => {

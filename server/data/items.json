@@ -5,14 +5,56 @@
     "mysteryTags": [
       "打算"
     ],
-    "realName": "打算",
+    "realName": "三体全集",
     "description": "打算",
-    "contact": "打算",
+    "contact": "13800138000",
     "image": "/uploads/df527cd4-9459-40dd-8105-d9cb4d1ab552.jpg",
-    "ownerId": "user_db57z6tmc8",
+    "ownerId": "user_r84rqic40u",
     "ownerName": "用户3948",
-    "status": "available",
+    "status": "exchanged",
     "createdAt": "2026-06-13T19:20:32.138Z",
+    "blurredImage": "/uploads/blur_df527cd4-9459-40dd-8105-d9cb4d1ab552.jpg"
+  },
+  {
+    "id": "test-item-2",
+    "category": "figure",
+    "mysteryTags": ["手办", "限量"],
+    "realName": "初音未来手办",
+    "description": "限量版手办，全新未拆封",
+    "contact": "13900139000",
+    "image": "/uploads/df527cd4-9459-40dd-8105-d9cb4d1ab552.jpg",
+    "ownerId": "test-user-2",
+    "ownerName": "小明",
+    "status": "exchanged",
+    "createdAt": "2026-06-12T10:00:00.000Z",
+    "blurredImage": "/uploads/blur_df527cd4-9459-40dd-8105-d9cb4d1ab552.jpg"
+  },
+  {
+    "id": "test-item-3",
+    "category": "game",
+    "mysteryTags": ["游戏", "Steam"],
+    "realName": "Steam游戏兑换码",
+    "description": "多款热门游戏兑换码",
+    "contact": "13800138000",
+    "image": "/uploads/df527cd4-9459-40dd-8105-d9cb4d1ab552.jpg",
+    "ownerId": "user_r84rqic40u",
+    "ownerName": "用户3948",
+    "status": "exchanged",
+    "createdAt": "2026-06-11T14:00:00.000Z",
+    "blurredImage": "/uploads/blur_df527cd4-9459-40dd-8105-d9cb4d1ab552.jpg"
+  },
+  {
+    "id": "test-item-4",
+    "category": "digital",
+    "mysteryTags": ["数码", "耳机"],
+    "realName": "无线蓝牙耳机",
+    "description": "降噪耳机，音质很好",
+    "contact": "13700137000",
+    "image": "/uploads/df527cd4-9459-40dd-8105-d9cb4d1ab552.jpg",
+    "ownerId": "test-user-3",
+    "ownerName": "小红",
+    "status": "exchanged",
+    "createdAt": "2026-06-10T09:00:00.000Z",
     "blurredImage": "/uploads/blur_df527cd4-9459-40dd-8105-d9cb4d1ab552.jpg"
   }
 ]

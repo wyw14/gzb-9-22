@@ -41,3 +41,11 @@ export function createExchange(myItemId, targetItemId) {
 export function getMyExchanges(userId) {
   return api.get('/exchanges/my', { params: { userId } }).then(res => res.data)
 }
+
+export function updateAppointment(exchangeId, appointmentData) {
+  return api.put(`/exchanges/${exchangeId}/appointment`, appointmentData).then(res => res.data)
+}
+
+export function cancelAppointment(exchangeId, userId) {
+  return api.delete(`/exchanges/${exchangeId}/appointment`, { params: { userId } }).then(res => res.data)
+}

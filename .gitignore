@@ -69,3 +69,7 @@ tmp/
 *.db
 *.pem
 *.key
+
+# Task prompt files
+任务提示词.md
+**/任务提示词.md

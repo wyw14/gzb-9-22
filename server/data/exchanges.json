@@ -1,1 +1,46 @@
-[]
+[
+  {
+    "id": "test-exchange-1",
+    "item1Id": "e25a9dbc-410c-4413-93ec-0c9a22b3953c",
+    "item2Id": "test-item-2",
+    "item1Contact": "13800138000",
+    "item2Contact": "13900139000",
+    "item1Owner": "user_r84rqic40u",
+    "item2Owner": "test-user-2",
+    "status": "completed",
+    "appointment": {
+      "location": "星巴克咖啡厅（人民广场店）",
+      "time": "2026-06-20T14:30:00.000Z",
+      "contactNote": "穿蓝色外套，戴黑框眼镜",
+      "reminder": "请记得带好物品，准时到达",
+      "createdBy": "user_r84rqic40u",
+      "createdAt": "2026-06-14T10:00:00.000Z",
+      "updatedAt": "2026-06-14T10:00:00.000Z",
+      "status": "scheduled"
+    },
+    "createdAt": "2026-06-14T08:00:00.000Z"
+  },
+  {
+    "id": "test-exchange-2",
+    "item1Id": "test-item-3",
+    "item2Id": "test-item-4",
+    "item1Contact": "13800138000",
+    "item2Contact": "13700137000",
+    "item1Owner": "user_r84rqic40u",
+    "item2Owner": "test-user-3",
+    "status": "completed",
+    "appointment": {
+      "location": "麦当劳（中关村店）",
+      "time": "2026-06-25T15:00",
+      "contactNote": "穿红色T恤，背双肩包",
+      "reminder": "请带好物品，提前5分钟到达",
+      "createdBy": "user_r84rqic40u",
+      "createdAt": "2026-06-13T22:05:22.462Z",
+      "updatedAt": "2026-06-13T22:05:22.462Z",
+      "status": "cancelled",
+      "cancelledBy": "user_r84rqic40u",
+      "cancelledAt": "2026-06-13T22:06:34.996Z"
+    },
+    "createdAt": "2026-06-13T15:30:00.000Z"
+  }
+]
