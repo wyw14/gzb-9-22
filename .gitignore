@@ -48,3 +48,24 @@ server/uploads/
 **/任务提示词.md
 任务提示词.md
 **/任务提示词.md
+
+# Additional baseline excludes
+out/
+**/out/
+temp/
+**/temp/
+tmp/
+**/tmp/
+.npm/
+.yarn/cache/
+.pnpm-store/
+.eslintcache
+*.tsbuildinfo
+*.local
+*.bak
+*.backup
+*.sqlite
+*.sqlite3
+*.db
+*.pem
+*.key
