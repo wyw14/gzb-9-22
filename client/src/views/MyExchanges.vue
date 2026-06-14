@@ -18,15 +18,26 @@
     </div>
 
     <div v-else class="exchange-list">
-      <div v-for="exc in exchanges" :key="exc.id" class="exchange-card card">
+      <div v-for="exc in sortedExchanges" :key="exc.id" class="exchange-card card">
         <div class="card-header">
-          <div class="card-date">
-            <div class="date-day">{{ formatDay(exc.createdAt) }}</div>
-            <div class="date-month">{{ formatMonth(exc.createdAt) }}</div>
+          <div :class="['card-date', getDateBadgeClass(exc)]">
+            <div class="date-day">{{ formatDay(getCardDate(exc)) }}</div>
+            <div class="date-month">{{ formatMonth(getCardDate(exc)) }}</div>
+            <div v-if="getDateTypeLabel(exc)" class="date-type">{{ getDateTypeLabel(exc) }}</div>
           </div>
           <div class="card-title">
             <span class="badge badge-exchanged">交换成功</span>
-            <span class="exchange-time">{{ formatDateTime(exc.createdAt) }}</span>
+            <span class="exchange-time">
+              <template v-if="exc.appointment && exc.appointment.status === 'scheduled'">
+                预约：{{ formatApptTime(exc.appointment.time) }}
+              </template>
+              <template v-else-if="exc.appointment && exc.appointment.status === 'cancelled'">
+                原预约：{{ formatApptTime(exc.appointment.time) }}
+              </template>
+              <template v-else>
+                交换于：{{ formatDateTime(exc.createdAt) }}
+              </template>
+            </span>
           </div>
         </div>
 
@@ -211,7 +222,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { getMyExchanges, appendAuth, updateAppointment, cancelAppointment } from '../api/index.js'
 import { userStore } from '../store/user.js'
 
@@ -228,6 +239,56 @@ const formData = ref({
   contactNote: '',
   reminder: ''
 })
+
+const sortedExchanges = computed(function() {
+  return [...exchanges.value].sort(function(a, b) {
+    const aHasScheduled = a.appointment && a.appointment.status === 'scheduled'
+    const bHasScheduled = b.appointment && b.appointment.status === 'scheduled'
+    const aHasCancelled = a.appointment && a.appointment.status === 'cancelled'
+    const bHasCancelled = b.appointment && b.appointment.status === 'cancelled'
+
+    if (aHasScheduled && bHasScheduled) {
+      return new Date(a.appointment.time) - new Date(b.appointment.time)
+    }
+    if (aHasScheduled) return -1
+    if (bHasScheduled) return 1
+
+    if (aHasCancelled && bHasCancelled) {
+      return new Date(b.appointment.cancelledAt) - new Date(a.appointment.cancelledAt)
+    }
+    if (aHasCancelled) return -1
+    if (bHasCancelled) return 1
+
+    return new Date(b.createdAt) - new Date(a.createdAt)
+  })
+})
+
+function getCardDate(exc) {
+  if (exc.appointment && (exc.appointment.status === 'scheduled' || exc.appointment.status === 'cancelled')) {
+    return exc.appointment.time
+  }
+  return exc.createdAt
+}
+
+function getDateTypeLabel(exc) {
+  if (exc.appointment && exc.appointment.status === 'scheduled') {
+    return '预约'
+  }
+  if (exc.appointment && exc.appointment.status === 'cancelled') {
+    return '原预约'
+  }
+  return ''
+}
+
+function getDateBadgeClass(exc) {
+  if (exc.appointment && exc.appointment.status === 'scheduled') {
+    return 'card-date-appointment'
+  }
+  if (exc.appointment && exc.appointment.status === 'cancelled') {
+    return 'card-date-cancelled'
+  }
+  return 'card-date-default'
+}
 
 function formatDate(dateStr) {
   const date = new Date(dateStr)
@@ -374,9 +435,8 @@ onMounted(loadExchanges)
 }
 
 .card-date {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 68px;
+  min-height: 68px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -384,6 +444,20 @@ onMounted(loadExchanges)
   justify-content: center;
   color: white;
   flex-shrink: 0;
+  padding: 6px 4px;
+}
+
+.card-date-default {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card-date-appointment {
+  background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+  box-shadow: 0 4px 12px rgba(67, 206, 162, 0.3);
+}
+
+.card-date-cancelled {
+  background: linear-gradient(135deg, #9e9e9e 0%, #616161 100%);
 }
 
 .date-day {
@@ -395,6 +469,15 @@ onMounted(loadExchanges)
 .date-month {
   font-size: 12px;
   margin-top: 2px;
+}
+
+.date-type {
+  font-size: 10px;
+  margin-top: 4px;
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  white-space: nowrap;
 }
 
 .card-title {
